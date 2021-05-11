@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "696944676281",
+    "project_id": "flutter-bellapp",
+    "storage_bucket": "flutter-bellapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696944676281:android:8a2ccabe50991aae19ba68",
+        "android_client_info": {
+          "package_name": "com.owenchew.flutter_firebaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696944676281-h055339sr036cnqiq51uplm7pdk14q60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.owenchew.flutter_firebaseapp",
+            "certificate_hash": "c91373fd144076f5f8b7df4c945ad0e4f43a1e3a"
+          }
+        },
+        {
+          "client_id": "696944676281-vqkk9fpjpeph3cta7a7j8lfcejbpt2ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0k1DLdthg36wNDa5kPv-x7PwOgPZcZio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696944676281-vqkk9fpjpeph3cta7a7j8lfcejbpt2ne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
