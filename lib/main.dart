@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebaseapp/screens/login/login.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:flutter_firebaseapp/utils/ourTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_firebaseapp/screens/root/root.dart';
 
 
 Future<void> main() async {
@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: OurTheme().buildTheme(),
-        home: OurLogin(),
+        //: OurLogin(),
+        home: OurRoot(),
         ),
     );
   }

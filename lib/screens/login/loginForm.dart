@@ -4,6 +4,7 @@ import 'package:flutter_firebaseapp/screens/signup/signup.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:flutter_firebaseapp/screens/home/home.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_firebaseapp/screens/noGroup/noGroup.dart';
 
 enum LoginType{
   email,
@@ -37,11 +38,11 @@ class _OurLoginFormState extends State<OurLoginForm>{
       }
 
       if(returnString == "success"){
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => HomeScreen()
-          ),
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false
         );
+
       } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
