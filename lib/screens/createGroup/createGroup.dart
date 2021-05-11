@@ -1,5 +1,9 @@
 import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/states/currentUser.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_firebaseapp/services/database.dart';
+import 'package:flutter_firebaseapp/screens/root/root.dart';
 
 class OurCreateGroup extends StatefulWidget {
   @override
@@ -8,8 +12,15 @@ class OurCreateGroup extends StatefulWidget {
 
 class OurCreateGroupState extends State<OurCreateGroup> {
 
+  void _createGroup(BuildContext context, String groupName) async {
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    String retString = await OurDatabase().createGroup(groupName, _currentUser.getCurrentUser.uid);
+    if(retString == "success"){
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>OurRoot(),), (route) => false);
+    }
+  }
 
-  TextEditingController groupIdController = TextEditingController();
+  TextEditingController groupNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +39,10 @@ class OurCreateGroupState extends State<OurCreateGroup> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    controller: groupIdController,
+                    controller: groupNameController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.group),
-                      hintText: "Group Id",
+                      hintText: "Group Name",
                     ),
                   ),
                   SizedBox(
@@ -49,7 +60,7 @@ class OurCreateGroupState extends State<OurCreateGroup> {
                         ),
                       ),
                     ),
-                    onPressed: (){},
+                    onPressed: () => _createGroup(context, groupNameController.text),
                   ),
                 ],
               ),

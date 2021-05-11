@@ -41,4 +41,48 @@ class OurDatabase{
 
   }
 
+  Future<String> createGroup (String groupName, String userUid) async {
+    String retVal = "error";
+    List<String> members = List();
+    try {
+      members.add(userUid);
+      DocumentReference _docRef = await _firestore.collection("groups").add({
+        'name' : groupName,
+        'leader' : userUid,
+        'members' : members,
+        'groupCreated' : Timestamp.now(),
+      });
+
+      await _firestore.collection("users").document(userUid).update({
+        'groupId' : _docRef.documentID,
+      });
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> joinGroup (String groupId, String userUid) async {
+    String retVal = "error";
+    List<String> members = List();
+    try {
+      members.add(userUid);
+      await _firestore.collection("groups").document(groupId).update({
+        'members': FieldValue.arrayUnion(members),
+      });
+      await _firestore.collection("users").document(userUid).update({
+        'groupId' : groupId,
+      });
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+
+
 }

@@ -5,6 +5,7 @@ import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:flutter_firebaseapp/screens/home/home.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/screens/noGroup/noGroup.dart';
+import 'package:flutter_firebaseapp/screens/root/root.dart';
 
 enum LoginType{
   email,
@@ -40,7 +41,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
       if(returnString == "success"){
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false
+            MaterialPageRoute(builder: (context) => OurRoot(),), (route) => false
         );
 
       } else {

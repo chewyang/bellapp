@@ -1,6 +1,9 @@
-
 import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/states/currentUser.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_firebaseapp/services/database.dart';
+import 'package:flutter_firebaseapp/screens/root/root.dart';
 
 class OurJoinGroup extends StatefulWidget {
   @override
@@ -8,6 +11,15 @@ class OurJoinGroup extends StatefulWidget {
 }
 
 class OurJoinGroupState extends State<OurJoinGroup> {
+
+  void _joinGroup(BuildContext context, String groupId) async {
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    String retString = await OurDatabase().joinGroup(groupId, _currentUser.getCurrentUser.uid);
+    if(retString == "success"){
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>OurRoot(),), (route) => false);
+    }
+  }
+
   TextEditingController groupIdController = TextEditingController();
 
 
@@ -51,7 +63,7 @@ class OurJoinGroupState extends State<OurJoinGroup> {
                         ),
                       ),
                     ),
-                    onPressed: (){},
+                    onPressed: () => _joinGroup(context, groupIdController.text),
                   ),
                 ],
               ),
