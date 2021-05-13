@@ -83,6 +83,20 @@ class OurDatabase{
     return retVal;
   }
 
+  Future<String> getGroupId (String uid) async {
+    String groupId;
+    try{
+      DocumentSnapshot _docSnapshot = await _firestore.collection("users").document(uid).get();
+      groupId = _docSnapshot.data()["groupId"];
+    } catch(e) {
+      print(e);
+    }
+    return groupId;
+
+  }
+
+  
+
 
 
 }
