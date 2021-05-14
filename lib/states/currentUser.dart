@@ -5,7 +5,7 @@ import 'package:flutter_firebaseapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_firebaseapp/services/database.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class CurrentUser extends ChangeNotifier{
 
@@ -56,6 +56,7 @@ class CurrentUser extends ChangeNotifier{
       _user.uid = _authResult.user.uid;
       _user.email = _authResult.user.email;
       _user.fullName = fullName;
+      // _user.notifToken = await _fcm.getToken();
       String _returnString = await OurDatabase().createUser(_user);
       if(_returnString == "success") {
         retVal = "success";
@@ -115,6 +116,7 @@ class CurrentUser extends ChangeNotifier{
         _user.uid = _authResult.user.uid;
         _user.email = _authResult.user.email;
         _user.fullName = _authResult.user.displayName;
+        // _user.notifToken = await _fcm.getToken();
         OurDatabase().createUser(_user);
       }
 

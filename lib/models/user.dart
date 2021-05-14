@@ -8,6 +8,7 @@ class OurUser {
   String fullName;
   Timestamp accountCreated;
   String groupId;
+  String notifToken;
 
   OurUser({
     this.uid,
@@ -15,6 +16,16 @@ class OurUser {
     this.fullName,
     this.accountCreated,
     this.groupId,
+    this.notifToken,
   });
+
+  OurUser.fromDocumentSnapshot({DocumentSnapshot doc}) {
+    uid = doc.documentID;
+    email = doc.data()['email'];
+    accountCreated = doc.data()['accountCreated'];
+    fullName = doc.data()['fullName'];
+    groupId = doc.data()['groupId'];
+    notifToken = doc.data()['notifToken'];
+  }
 
 }
