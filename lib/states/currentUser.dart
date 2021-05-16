@@ -24,7 +24,13 @@ class CurrentUser extends ChangeNotifier{
         _currentUser = await OurDatabase().getUserInfo(firebaseUser.uid); //_currentUser is a state in this case
        if (_currentUser != null)
           retVal = "success";
+      // ignore: null_aware_in_condition
       }
+
+      if(firebaseUser.isAnonymous) {
+        retVal = "success anon";
+      }
+
     } catch (e) {
       print(e);
     }
@@ -126,6 +132,33 @@ class CurrentUser extends ChangeNotifier{
 
     } catch (e){
       retVal = e.message;
+    }
+
+    return retVal;
+  }
+
+  Future<String> signInAnon() async {
+    OurUser _user = OurUser();
+    String retVal = "error";
+
+    try {
+      UserCredential _authResult = await _auth.signInAnonymously();
+      _user.uid = _authResult.user.uid;
+      _user.email = _authResult.user.email;
+
+      // _user.notifToken = await _fcm.getToken();
+      String _returnString = await OurDatabase().createUser(_user);
+      if(_returnString == "success") {
+        retVal = "success";
+      }
+
+      retVal = "success";
+
+
+    } on PlatformException catch (e){
+      retVal = e.message;
+    } catch (e) {
+      print(e);
     }
 
     return retVal;

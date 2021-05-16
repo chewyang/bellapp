@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:flutter_firebaseapp/screens/signup/signup.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:flutter_firebaseapp/screens/home/home.dart';
+import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/screens/noGroup/noGroup.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_firebaseapp/screens/root/root.dart';
 enum LoginType{
   email,
   google,
+  anon,
 }
 
 class OurLoginForm extends StatefulWidget {
@@ -34,6 +35,10 @@ class _OurLoginFormState extends State<OurLoginForm>{
 
         case LoginType.google:
           returnString = await _currentUser.loginUserWithGoogle();
+          break;
+
+        case LoginType.anon:
+          returnString = await _currentUser.signInAnon();
           break;
         default:
       }
@@ -153,7 +158,28 @@ class _OurLoginFormState extends State<OurLoginForm>{
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=> OurSignUp()),);
               },
             ),
-            _googleButton()
+            _googleButton(),
+
+            RaisedButton(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100),
+                  child: Text(
+                    "Tap to Scan and Ring doorbell",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  )
+              ),
+              onPressed: () {
+                _loginUser(
+                    type: LoginType.anon,
+                    context: context
+                );
+                //opens camera app
+              } ,
+            ),
 
           ]
       ),

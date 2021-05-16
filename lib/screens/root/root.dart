@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/screens/splashScreen/splashScreen.dart';
 import 'package:flutter_firebaseapp/screens/noGroup/noGroup.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:io';
+
+import '../groupRing.dart';
+
+// import 'dart:io';
 
 
 
@@ -15,7 +18,8 @@ enum AuthStatus {
   unknown,
   notLoggedIn,
   notInGroup,
-  inGroup
+  inGroup,
+  anon
 }
 
 class OurRoot extends StatefulWidget {
@@ -31,13 +35,13 @@ class _OurRootState extends State<OurRoot> {
   void initState() {
     super.initState();
 
-    if (Platform.isIOS) {
-      _firebaseMessaging
-          .requestNotificationPermissions(IosNotificationSettings());
-      _firebaseMessaging.onIosSettingsRegistered.listen((event) {
-        print("IOS Registered");
-      });
-    }
+    // if (Platform.isIOS) {
+    //   _firebaseMessaging
+    //       .requestNotificationPermissions(IosNotificationSettings());
+    //   _firebaseMessaging.onIosSettingsRegistered.listen((event) {
+    //     print("IOS Registered");
+    //   });
+    // }
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -72,6 +76,11 @@ class _OurRootState extends State<OurRoot> {
         });
       }
 
+    } else if (returnString == "success anon") {
+      setState(() {
+        _authStatus = AuthStatus.anon;
+      });
+
     } else {
       setState(() {
         _authStatus = AuthStatus.notLoggedIn;
@@ -84,6 +93,9 @@ class _OurRootState extends State<OurRoot> {
     Widget retVal;
 
     switch(_authStatus) {
+      case AuthStatus.anon:
+        retVal = OurGroupRing();
+        break;
       case AuthStatus.unknown:
         retVal = OurSplashScreen();
         break;
@@ -96,6 +108,7 @@ class _OurRootState extends State<OurRoot> {
       case AuthStatus.inGroup:
         retVal = HomeScreen();
         break;
+
     }
 
     return retVal;

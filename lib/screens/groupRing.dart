@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/models/group.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/services/database.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
 
-class OurJoinGroup extends StatefulWidget {
+class OurGroupRing extends StatefulWidget {
   @override
-  OurJoinGroupState createState() => OurJoinGroupState();
+  OurGroupRingState createState() => OurGroupRingState();
 }
 
-class OurJoinGroupState extends State<OurJoinGroup> {
+class OurGroupRingState extends State<OurGroupRing> {
 
-  void _joinGroup(BuildContext context, String groupId) async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String retString = await OurDatabase().joinGroup(groupId, _currentUser.getCurrentUser);
-    if(retString == "success"){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>OurRoot(),), (route) => false);
-    }
+  Future<String> sendNotif(String groupId) async {
+    // CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    // String groupId = await OurDatabase().getGroupId(_currentUser.getCurrentUser.uid);
+    OurGroup groupInfo = await OurDatabase().getGroupInfo(groupId);
+
+    OurDatabase().createNotifications(groupInfo.tokens ?? [], groupId);
   }
 
   TextEditingController groupIdController = TextEditingController();
@@ -27,6 +28,25 @@ class OurJoinGroupState extends State<OurJoinGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: Text("This is home"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Sign out"),
+              onPressed: () async {
+                CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen:false);
+                String returnString = await _currentUser.signOut();
+                if(returnString == "success") {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => OurRoot(),), (route) => false
+                  );
+                }
+
+              },
+            )
+          ]
+      ),
       body: Column(
         children: <Widget>[
           Padding(
@@ -45,7 +65,7 @@ class OurJoinGroupState extends State<OurJoinGroup> {
                     controller: groupIdController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.group),
-                      hintText: "Group Id",
+                      hintText: "Group Id la jibai",
                     ),
                   ),
                   SizedBox(
@@ -63,7 +83,7 @@ class OurJoinGroupState extends State<OurJoinGroup> {
                         ),
                       ),
                     ),
-                    onPressed: () => _joinGroup(context, groupIdController.text),
+                    onPressed: () => sendNotif(groupIdController.text),
                   ),
                 ],
               ),

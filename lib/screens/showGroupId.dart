@@ -22,9 +22,9 @@ class _State extends State<ShowGroupId> {
     print(retString);
   }
 
-  Future<String> sendNotif() async {
-    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String groupId = await OurDatabase().getGroupId(_currentUser.getCurrentUser.uid);
+  Future<String> sendNotif(String groupId) async {
+    // CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    // String groupId = await OurDatabase().getGroupId(_currentUser.getCurrentUser.uid);
     OurGroup groupInfo = await OurDatabase().getGroupInfo(groupId);
 
     OurDatabase().createNotifications(groupInfo.tokens ?? [], groupId);
@@ -60,7 +60,7 @@ class _State extends State<ShowGroupId> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
 
-                        RaisedButton(child: Text("Send notifications", style: TextStyle(color: Colors.white)), onPressed: (){sendNotif();},),
+                        RaisedButton(child: Text("Send notifications", style: TextStyle(color: Colors.white)), onPressed: (){sendNotif(snapshot.data.toString());},),
                       ],
                     )
                 )
