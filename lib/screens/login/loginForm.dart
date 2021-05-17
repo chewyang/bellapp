@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebaseapp/screens/signup/signup.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
@@ -6,6 +8,11 @@ import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/screens/noGroup/noGroup.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
+import 'package:flutter_firebaseapp/models/group.dart';
+import 'package:flutter_firebaseapp/services/database.dart';
+
+import 'package:flutter_firebaseapp/screens/groupRing.dart';
+
 
 enum LoginType{
   email,
@@ -16,11 +23,17 @@ enum LoginType{
 class OurLoginForm extends StatefulWidget {
   @override
   _OurLoginFormState createState() => _OurLoginFormState();
+  OurLoginForm({this.groupId});
+  final String groupId;
 }
 
 class _OurLoginFormState extends State<OurLoginForm>{
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController groupIdController = TextEditingController();
+  bool groupExist = false;
+
+
 
   void _loginUser({@required LoginType type, String email, String password, BuildContext context}) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
@@ -43,13 +56,22 @@ class _OurLoginFormState extends State<OurLoginForm>{
         default:
       }
 
-      if(returnString == "success"){
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => OurRoot(),), (route) => false
-        );
-
-      } else {
+     if(returnString == "success" && type != LoginType.anon) {
+       Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(builder: (context) => OurRoot(),), (route) => false
+       );
+     } else if(returnString == "success" && type == LoginType.anon) {
+       if(groupExist) {
+         Navigator.pushAndRemoveUntil(
+             context,
+             MaterialPageRoute(builder: (context) => OurGroupRing(groupId: groupIdController.text,),), (route) => false
+         );
+       } else {
+         final snackBar = SnackBar(content: Text("No such group exists!"));
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+       }
+     } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text(returnString),
@@ -61,6 +83,22 @@ class _OurLoginFormState extends State<OurLoginForm>{
       print(e);
     }
     
+  }
+
+
+  void sendAnonNotif(String groupId) async {
+    _loginUser(
+        type: LoginType.anon,
+        context: context
+    );
+    OurGroup groupInfo = await OurDatabase().getGroupInfo(groupId);
+    if(groupInfo == null) {
+      groupExist = false;
+    } else {
+      groupExist = true;
+      OurDatabase().createNotifications(
+          groupInfo.tokens ?? [], groupIdController.text);
+    }
   }
 
   Widget _googleButton() {
@@ -100,7 +138,10 @@ class _OurLoginFormState extends State<OurLoginForm>{
 
   @override
   Widget build(BuildContext context) {
-    return new OurContainer(
+
+    return new Column(
+        children: <Widget>[
+      OurContainer(
       child: Column(
           children: <Widget>[
             Padding(
@@ -160,29 +201,47 @@ class _OurLoginFormState extends State<OurLoginForm>{
             ),
             _googleButton(),
 
-            RaisedButton(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100),
-                  child: Text(
-                    "Tap to Scan and Ring doorbell",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  )
-              ),
-              onPressed: () {
-                _loginUser(
-                    type: LoginType.anon,
-                    context: context
-                );
-                //opens camera app
-              } ,
-            ),
-
           ]
       ),
+    ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+
+          ),
+          OurContainer(
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: groupIdController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.group),
+                    hintText: "Group Id la jibai",
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RaisedButton(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 80),
+                    child: Text(
+                      "Join",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    groupIdController.text = widget.groupId;
+                    sendAnonNotif(groupIdController.text);
+                  },
+                ),
+              ],
+            ),
+          ),
+    ]
     );
   }
 

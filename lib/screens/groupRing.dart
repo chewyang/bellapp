@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_firebaseapp/models/group.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
@@ -9,19 +11,25 @@ import 'package:flutter_firebaseapp/screens/root/root.dart';
 class OurGroupRing extends StatefulWidget {
   @override
   OurGroupRingState createState() => OurGroupRingState();
+
+  const OurGroupRing({
+    this.groupId,
+    // this.child,
+  });
+
+  final String groupId;
+  // final String child;
+  String get getGroupId => groupId;
 }
 
 class OurGroupRingState extends State<OurGroupRing> {
 
-  Future<String> sendNotif(String groupId) async {
-    // CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    // String groupId = await OurDatabase().getGroupId(_currentUser.getCurrentUser.uid);
-    OurGroup groupInfo = await OurDatabase().getGroupInfo(groupId);
+  Future<void> sendNotif() async {
+    OurGroup groupInfo = await OurDatabase().getGroupInfo(widget.groupId);
 
-    OurDatabase().createNotifications(groupInfo.tokens ?? [], groupId);
+    OurDatabase().createNotifications(groupInfo.tokens ?? [], widget.groupId);
   }
 
-  TextEditingController groupIdController = TextEditingController();
 
 
 
@@ -61,16 +69,6 @@ class OurGroupRingState extends State<OurGroupRing> {
             child: OurContainer(
               child: Column(
                 children: <Widget>[
-                  TextFormField(
-                    controller: groupIdController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.group),
-                      hintText: "Group Id la jibai",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
                   RaisedButton(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 80),
@@ -83,7 +81,7 @@ class OurGroupRingState extends State<OurGroupRing> {
                         ),
                       ),
                     ),
-                    onPressed: () => sendNotif(groupIdController.text),
+                    onPressed: () => sendNotif(),
                   ),
                 ],
               ),
