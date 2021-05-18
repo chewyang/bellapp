@@ -31,6 +31,8 @@ class OurGroupRingState extends State<OurGroupRing> {
   }
 
 
+  // }
+
 
 
   @override
@@ -63,6 +65,7 @@ class OurGroupRingState extends State<OurGroupRing> {
               children: <Widget>[BackButton()],
             ),
           ),
+          // projectWidget(),
           Spacer(),
           Padding(
             padding: const EdgeInsets.all(20.0),

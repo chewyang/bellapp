@@ -33,7 +33,9 @@ class _OurLoginFormState extends State<OurLoginForm>{
   TextEditingController groupIdController = TextEditingController();
   bool groupExist = false;
 
-
+  Future sleep1() async {
+    return await Future.delayed(Duration(seconds: 3));
+  }
 
   void _loginUser({@required LoginType type, String email, String password, BuildContext context}) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
@@ -51,6 +53,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
           break;
 
         case LoginType.anon:
+          await Future.delayed(Duration(seconds: 3));
           returnString = await _currentUser.signInAnon();
           break;
         default:

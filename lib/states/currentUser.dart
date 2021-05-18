@@ -142,6 +142,7 @@ class CurrentUser extends ChangeNotifier{
     String retVal = "error";
 
     try {
+      await FirebaseAuth.instance.setPersistence(Persistence.NONE);
       UserCredential _authResult = await _auth.signInAnonymously();
       _user.uid = _authResult.user.uid;
       _user.email = _authResult.user.email;

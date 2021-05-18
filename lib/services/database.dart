@@ -149,6 +149,49 @@ class OurDatabase{
 
   }
 
+  Future<List> getMemberNames(List<String> memberIds) async {
+    List<String> names = [];
+    for (var name in memberIds) {
+      String namee = await getMemberName(name);
+      names.add(namee);
+
+    }
+
+    return names;
+  }
+
+  Future<String> getMemberName(String memberId) async {
+    DocumentSnapshot _docSnapshot = await _firestore.collection("users").doc(memberId).get();
+    String name = _docSnapshot.data()["fullName"];
+    return name;
+  }
+
+
+  Future<List> getGroupMemberIds(String groupId) async {
+    OurGroup groupInfo = await getGroupInfo(groupId);
+    List<String> memberIds = groupInfo.members;
+    return  memberIds;
+    // return ListView.builder(
+    //   itemCount: members.length,
+    //   itemBuilder: (context, index) {
+    //     return ListTile(
+    //       title: Text('${members[index]}'),
+    //     );
+    //   },
+    // );
+
+    // return new StreamBuilder(
+    //     stream: FirebaseFirestore.instance.collection('groups').doc(groupId).snapshots(),
+    //     builder: (context, snapshot) {
+    //       if (!snapshot.hasData) {
+    //         return new Text("Loading");
+    //       }
+    //       var userDocument = snapshot.data;
+    //       return new Text(userDocument["name"]);
+    //     }
+    // );
+  }
+
 
 
 

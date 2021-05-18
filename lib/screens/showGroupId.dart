@@ -21,6 +21,12 @@ class _State extends State<ShowGroupId> {
     return retString;
     print(retString);
   }
+  Future<List> getGroupmemberNames() async {
+    String groupId = await showGroupId();
+    List<String> memberIds = await OurDatabase().getGroupMemberIds(groupId);
+    List<String> memberNames = await OurDatabase().getMemberNames(memberIds);
+    return memberNames;
+  }
 
   Future<String> sendNotif(String groupId) async {
     // CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
@@ -32,42 +38,60 @@ class _State extends State<ShowGroupId> {
 
   // create
 
+  Widget build(BuildContext context) => FutureBuilder(
+    // FutureBuilder(
+      future: getGroupmemberNames(),
+      builder:(context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Container(
+              child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Text(snapshot.data[index] + "ass");
+                  }
+              )
+          );
+        }
+      }
+  );
 
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-        future: showGroupId(),
-        builder: (BuildContext context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(child: Text("Loading...."),);
-          } else {
-            return Column(
-              children: <Widget>[
-                Spacer(flex:1,),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Text("Group ID: " + snapshot.data.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.grey[600])),
-                ),
-
-                Spacer(flex: 1,),
-                Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-
-                        RaisedButton(child: Text("Send notifications", style: TextStyle(color: Colors.white)), onPressed: (){sendNotif(snapshot.data.toString());},),
-                      ],
-                    )
-                )
-              ],);
-          }
-        },
-      ),
-    );
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Container(
+  //     child: FutureBuilder(
+  //       future: showGroupId(),
+  //       builder: (BuildContext context, snapshot){
+  //         if(snapshot.connectionState == ConnectionState.waiting){
+  //           return Center(child: Text("Loading...."),);
+  //         } else {
+  //           return Column(
+  //             children: <Widget>[
+  //               Spacer(flex:1,),
+  //
+  //               Padding(
+  //                 padding: EdgeInsets.symmetric(horizontal: 40.0),
+  //                 child: Text("Group ID: " + snapshot.data.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.grey[600])),
+  //               ),
+  //
+  //               Spacer(flex: 1,),
+  //               Padding(
+  //                   padding: const EdgeInsets.symmetric(vertical: 20.0),
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                     children: <Widget>[
+  //
+  //                       RaisedButton(child: Text("Send notifications", style: TextStyle(color: Colors.white)), onPressed: (){sendNotif(snapshot.data.toString());},),
+  //                     ],
+  //                   )
+  //               )
+  //             ],);
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
 }
