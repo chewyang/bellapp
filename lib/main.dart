@@ -17,7 +17,7 @@ Future<void> main() async {
   String groupId;
   try {
     final String url = Uri.base.toString();
-    groupId = url.substring(34);
+    groupId = url.substring(32);
     debugPrint(url);
     debugPrint(Uri.base.queryParameters['lanjiao']); // 3.14
     debugPrint(groupId); // 3.14

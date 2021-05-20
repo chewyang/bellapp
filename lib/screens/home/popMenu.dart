@@ -2,9 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/screens/qrCode.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class PopMenu extends StatefulWidget {
   @override
@@ -17,7 +19,7 @@ class _PopMenuState extends State<PopMenu> {
     return PopupMenuButton<String>(
       onSelected: handleClick,
       itemBuilder: (BuildContext context) {
-        return {'Sign Out', 'Settings'}.map((String choice) {
+        return {'Sign Out', 'Generate QR code'}.map((String choice) {
           return PopupMenuItem<String>(
             value: choice,
             child: Text(choice),
@@ -25,6 +27,13 @@ class _PopMenuState extends State<PopMenu> {
         }).toList();
       },
     );
+  }
+
+
+
+
+  void _goToQrCode(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => OurQrCode(),), );
   }
 
   void handleClick(String value) async {
@@ -39,8 +48,13 @@ class _PopMenuState extends State<PopMenu> {
           );
         }
         break;
-      case 'Settings':
+      case 'Generate QR code':
+        _goToQrCode(context);
         break;
     }
   }
+
+
 }
+
+

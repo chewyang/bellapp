@@ -4,6 +4,7 @@ import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
 import 'file:///C:/Users/Razer/OneDrive/udemy/bellApp/flutter_firebaseapp/lib/screens/home/showGroupId.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class OurHomeScreenState extends State<HomeScreen> {
         ]
       ),
       body: ShowGroupId(),
+
+
     );
   }
 }
