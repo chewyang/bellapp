@@ -196,7 +196,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
             ), //Login button
 
             FlatButton(
-              child:Text("Dont have a pussy? Get one here"),
+              child:Text("Dont have a account? Get one here"),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               onPressed: (){
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=> OurSignUp()),);

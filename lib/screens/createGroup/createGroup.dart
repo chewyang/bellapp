@@ -14,7 +14,7 @@ class OurCreateGroupState extends State<OurCreateGroup> {
 
   void _createGroup(BuildContext context, String groupName) async {
     CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
-    String retString = await OurDatabase().createGroup(groupName, _currentUser.getCurrentUser.uid);
+    String retString = await OurDatabase().createGroup(groupName, _currentUser.getCurrentUser);
     if(retString == "success"){
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>OurRoot(),), (route) => false);
     }

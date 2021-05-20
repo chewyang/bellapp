@@ -43,30 +43,29 @@ class OurDatabase{
 
   }
 
-  Future<String> createGroup (String groupName, String userUid) async {
 
-
-
+  Future<String> createGroup (String groupName, OurUser user) async {
 
     String retVal = "error";
-    List<String> members = List();
+    List<Map> members = List();
     List<String> tokens = List();
 
     try {
-      DocumentSnapshot _docSnapshot = await _firestore.collection("users").document(userUid).get();
+      DocumentSnapshot _docSnapshot = await _firestore.collection("users").document(user.uid).get();
       String userToken =  _docSnapshot.data()["notifToken"];
 
-      members.add(userUid);
+      members.add(user.toJson());
       tokens.add(userToken);
       DocumentReference _docRef = await _firestore.collection("groups").add({
         'name' : groupName,
-        'leader' : userUid,
+        'leader' : user.uid,
         'members' : members,
         'groupCreated' : Timestamp.now(),
         'tokens': tokens,
+
       });
 
-      await _firestore.collection("users").document(userUid).update({
+      await _firestore.collection("users").document(user.uid).update({
         'groupId' : _docRef.documentID,
       });
 
@@ -79,20 +78,16 @@ class OurDatabase{
 
   Future<String> joinGroup (String groupId, OurUser user) async {
     String retVal = "error";
-    List<String> members = List();
+    List<Map> members = List();
     List<String> tokens = List();
 
     try {
-      members.add(user.uid);
-      tokens.add(user.notifToken);
-
-      // DocumentSnapshot _docSnapshot = await _firestore.collection("users").document(user.uid).get();
-      // String userToken =  _docSnapshot.data()["notifToken"].toString();
-
+      members.add(user.toJson());
+      //tokens.add(user.notifToken);
 
       await _firestore.collection("groups").document(groupId).update({
         'members': FieldValue.arrayUnion(members),
-        'tokens': FieldValue.arrayUnion(tokens),
+        // 'tokens': FieldValue.arrayUnion(tokens),
       });
       await _firestore.collection("users").document(user.uid).update({
         'groupId' : groupId.trim(),
@@ -146,51 +141,29 @@ class OurDatabase{
       print(e);
     }
     return retVal;
-
   }
 
-  Future<List> getMemberNames(List<String> memberIds) async {
-    List<String> names = [];
-    for (var name in memberIds) {
-      String namee = await getMemberName(name);
-      names.add(namee);
+  Future<String> leaveGroup (String groupId, OurUser user ) async {
+    List<Map> members = List();
+    members.add(user.toJson());
+    print("testing");
+    print("groupId: " + groupId);
+    try {
+      print("assdick"+ user.toJson().toString());
+      await _firestore.collection('groups').doc(groupId).update({
+        'members': FieldValue.arrayRemove(members)
+      },);
 
+      await _firestore.collection("users").document(user.uid).update({
+        'groupId' : FieldValue.delete(),
+      });
+    } catch (e) {
+      print(e);
     }
-
-    return names;
-  }
-
-  Future<String> getMemberName(String memberId) async {
-    DocumentSnapshot _docSnapshot = await _firestore.collection("users").doc(memberId).get();
-    String name = _docSnapshot.data()["fullName"];
-    return name;
   }
 
 
-  Future<List> getGroupMemberIds(String groupId) async {
-    OurGroup groupInfo = await getGroupInfo(groupId);
-    List<String> memberIds = groupInfo.members;
-    return  memberIds;
-    // return ListView.builder(
-    //   itemCount: members.length,
-    //   itemBuilder: (context, index) {
-    //     return ListTile(
-    //       title: Text('${members[index]}'),
-    //     );
-    //   },
-    // );
 
-    // return new StreamBuilder(
-    //     stream: FirebaseFirestore.instance.collection('groups').doc(groupId).snapshots(),
-    //     builder: (context, snapshot) {
-    //       if (!snapshot.hasData) {
-    //         return new Text("Loading");
-    //       }
-    //       var userDocument = snapshot.data;
-    //       return new Text(userDocument["name"]);
-    //     }
-    // );
-  }
 
 
 

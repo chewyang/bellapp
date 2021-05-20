@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_firebaseapp/models/user.dart';
 
 class OurGroup{
   String id;
   String name;
   String leader;
-  List<String> members;
+  List<OurUser> members;
   Timestamp groupCreated;
   List<String> tokens;
 
@@ -19,13 +20,22 @@ class OurGroup{
   });
 
   OurGroup.fromDocumentSnapshot({DocumentSnapshot doc}) {
-    id = doc.documentID;
+    id = doc.id;
     name = doc.data()["name"];
     leader = doc.data()["leader"];
-    members = List<String>.from(doc.data()["members"]);
+
+    List<OurUser> users = [];
+    List membersBefore = doc.data()["members"].toList();
+
+    for (var user in membersBefore) {
+      users.add(OurUser.fromJson(user));
+    }
+    members = users;
+
     tokens = List<String>.from(doc.data()["tokens"] ?? []);
     groupCreated = doc.data()["groupCreated"];
 
   }
+
 
 }

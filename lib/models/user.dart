@@ -20,12 +20,29 @@ class OurUser {
   });
 
   OurUser.fromDocumentSnapshot({DocumentSnapshot doc}) {
-    uid = doc.documentID;
+    uid = doc.id;
     email = doc.data()['email'];
     accountCreated = doc.data()['accountCreated'];
     fullName = doc.data()['fullName'];
     groupId = doc.data()['groupId'];
     notifToken = doc.data()['notifToken'];
   }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'accountCreated': this.accountCreated,
+        'email': this.email,
+        'fullName': this.fullName,
+        'notifToken': this.notifToken,
+        'uid': this.uid,
+      };
+
+  OurUser.fromJson(Map parsedJson)
+    : uid = parsedJson['uid'],
+     email = parsedJson['email'],
+    fullName = parsedJson['fullName'],
+    accountCreated = parsedJson['accountCreated'],
+    notifToken = parsedJson['notifToken'];
+
 
 }
