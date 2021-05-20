@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebaseapp/models/user.dart';
+import 'package:flutter_firebaseapp/screens/home/savePdf.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -38,10 +39,18 @@ class _OurQrCodeState extends State<OurQrCode> {
                 ),
               ),
             ),
+            RaisedButton(
+              onPressed:(){_goToPdf(context);} ,
+
+            )
       ]),
 
 
     );
+  }
+
+  void _goToPdf(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SavePdf(getGroupId()),), );
   }
     String getGroupId() {
       CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
