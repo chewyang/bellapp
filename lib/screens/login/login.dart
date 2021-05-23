@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/screens/login/anonLoginForm.dart';
+// import 'package:flutter_firebaseapp/screens/login/anonRingBellForm.dart';
 import 'package:flutter_firebaseapp/screens/login/loginForm.dart';
-
+import 'package:flutter/foundation.dart';
 class OurLogin extends StatelessWidget {
   OurLogin({this.groupId});
   final String groupId;
 
   loginDecider(){
 
-    if(groupId == null){
+    if(!kIsWeb){
       return OurLoginForm();
     }
     else {
       debugPrint(groupId + "step 3"); // 3.14
 
-      return OurLoginForm(groupId: groupId,);
+      return OurAnonLoginForm(groupId: groupId,);
     }
   }
 

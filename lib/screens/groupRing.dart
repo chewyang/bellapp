@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_firebaseapp/models/group.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_firebaseapp/widgets/ourContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebaseapp/services/database.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
+
+import 'package:flutter_firebaseapp/screens/login/anonLoginForm.dart';
 
 class OurGroupRing extends StatefulWidget {
   @override
@@ -32,7 +35,21 @@ class OurGroupRingState extends State<OurGroupRing> {
 
 
   // }
+  Widget loginDecider(){
 
+    if(kIsWeb){
+      debugPrint("web access bitch!");
+
+      return OurAnonLoginForm(groupId: widget.groupId,);
+
+    }
+    else {
+      debugPrint("app access bitch!");
+
+      return OurRoot();
+
+    }
+  }
 
 
   @override
@@ -49,7 +66,7 @@ class OurGroupRingState extends State<OurGroupRing> {
                 if(returnString == "success") {
                   Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => OurRoot(),), (route) => false
+                      MaterialPageRoute(builder: (context) => loginDecider(),), (route) => false
                   );
                 }
 

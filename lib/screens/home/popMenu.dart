@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebaseapp/models/user.dart';
+import 'package:flutter_firebaseapp/screens/home/savePdf.dart';
 import 'package:flutter_firebaseapp/screens/qrCode.dart';
 import 'package:flutter_firebaseapp/screens/root/root.dart';
 import 'package:flutter_firebaseapp/states/currentUser.dart';
@@ -29,11 +31,15 @@ class _PopMenuState extends State<PopMenu> {
     );
   }
 
-
+  String getGroupId() {
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+    OurUser ourUser = _currentUser.getCurrentUser;
+    return ourUser.groupId;
+  }
 
 
   void _goToQrCode(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => OurQrCode(),), );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SavePdf(getGroupId()),), );
   }
 
   void handleClick(String value) async {

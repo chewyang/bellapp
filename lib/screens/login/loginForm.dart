@@ -30,7 +30,7 @@ class OurLoginForm extends StatefulWidget {
 class _OurLoginFormState extends State<OurLoginForm>{
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController groupIdController = TextEditingController();
+  TextEditingController guestInfoController = TextEditingController();
   bool groupExist = false;
 
   Future sleep1() async {
@@ -68,7 +68,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
        if(groupExist) {
          Navigator.pushAndRemoveUntil(
              context,
-             MaterialPageRoute(builder: (context) => OurGroupRing(groupId: groupIdController.text,),), (route) => false
+             MaterialPageRoute(builder: (context) => OurGroupRing(groupId: guestInfoController.text,),), (route) => false
          );
        } else {
          final snackBar = SnackBar(content: Text("No such group exists!"));
@@ -89,7 +89,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
   }
 
 
-  void sendAnonNotif(String groupId) async {
+  void sendAnonNotif(String groupId, String guestInfoText) async {
     _loginUser(
         type: LoginType.anon,
         context: context
@@ -99,8 +99,7 @@ class _OurLoginFormState extends State<OurLoginForm>{
       groupExist = false;
     } else {
       groupExist = true;
-      OurDatabase().createNotifications(
-          groupInfo.tokens ?? [], groupIdController.text);
+      OurDatabase().createNotifications( groupInfo.tokens ?? [],  widget.groupId, info: guestInfoText);
     }
   }
 
@@ -207,43 +206,43 @@ class _OurLoginFormState extends State<OurLoginForm>{
           ]
       ),
     ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-
-          ),
-          OurContainer(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: groupIdController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.group),
-                    hintText: "Group Id la jibai",
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                RaisedButton(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 80),
-                    child: Text(
-                      "Join",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                  onPressed: () async {
-                    groupIdController.text = widget.groupId;
-                    sendAnonNotif(groupIdController.text);
-                  },
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //     padding: EdgeInsets.symmetric(vertical: 20),
+          //
+          // ),
+          // OurContainer(
+          //   child: Column(
+          //     children: <Widget>[
+          //       TextFormField(
+          //         controller: guestInfoController,
+          //         decoration: InputDecoration(
+          //           prefixIcon: Icon(Icons.group),
+          //           hintText: "Group Id la jibai",
+          //         ),
+          //       ),
+          //       SizedBox(
+          //         height: 20.0,
+          //       ),
+          //       RaisedButton(
+          //         child: Padding(
+          //           padding: EdgeInsets.symmetric(horizontal: 80),
+          //           child: Text(
+          //             "Join",
+          //             style: TextStyle(
+          //               color: Colors.white,
+          //               fontWeight: FontWeight.bold,
+          //               fontSize: 20.0,
+          //             ),
+          //           ),
+          //         ),
+          //         onPressed: () async {
+          //           // groupIdController.text = widget.groupId;
+          //           sendAnonNotif(widget.groupId, guestInfoController.text);
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
     ]
     );
   }

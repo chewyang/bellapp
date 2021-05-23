@@ -57,11 +57,23 @@ class _SavePdfState extends State<SavePdf> {
     return doc.save();
   }
 
-  Future<File> getPdf() async {
+  Future<File> previewPdf() async {
     print("success level 1");
 
     Uint8List uint8list = await generateDocument();
     print("success level 2");
+    Directory output = await getTemporaryDirectory();
+    File filePreview = File(output.path+"lmao.pdf");
+    filePreview.writeAsBytes(uint8list);
+
+    return filePreview;
+
+
+  }
+
+  Future<File> downloadPdf() async {
+
+    Uint8List uint8list = await generateDocument();
     Directory output = await getTemporaryDirectory();
     File file = File("/storage/emulated/0/Download/" "example.pdf");
     await askForStoragePermission();
@@ -76,6 +88,8 @@ class _SavePdfState extends State<SavePdf> {
     return file;
   }
 
+
+
   Future askForStoragePermission() async {
     var status = await Permission.storage.status;
     if (!status.isGranted) {
@@ -87,18 +101,40 @@ class _SavePdfState extends State<SavePdf> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("hi"),
+        title: Text("Generate QR Code"),
       ),
       body: FutureBuilder<File>(
-        future: getPdf(),
+        future: previewPdf(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Center(
-              child: PDFView(
-                filePath: snapshot.data.path,
-                autoSpacing: false,
-                pageFling: false,
-              ),
+           return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: Text("Preview", textAlign: TextAlign.left ,style: TextStyle(fontSize: 20, color: Colors.grey[600])),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Center(
+                      child: Container(
+                        height: 400,
+                        child: AspectRatio(
+                          aspectRatio: 1/1.294,
+                          child: PDFView(
+                            filePath: snapshot.data.path,
+                            autoSpacing: false,
+                            pageFling: false,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all( 20.0),
+                    child: Text("Tap on Download to save this QR code in printable PDF form", textAlign: TextAlign.center ,style: TextStyle(fontSize: 20, color: Colors.grey[600])),
+                  ),
+                  RaisedButton(child: Text("Download"),onPressed: () async {await downloadPdf();})
+              ]
             );
           } else {
             return Center(child: CircularProgressIndicator());

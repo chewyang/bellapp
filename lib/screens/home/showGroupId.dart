@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebaseapp/models/user.dart';
@@ -61,13 +62,47 @@ class _State extends State<ShowGroupId> {
           return Column(
             children: <Widget>[
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OurContainer(
-                  child: Text("Group ID: " + snapshot.data[1]),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 10.0,
+                              spreadRadius: 1.0,
+                              offset: Offset(4.0,4.0,),
+                            )
+                          ],
+                        ),
+                        child: Center(
+                          child: Row(
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.info_outline),
+                                  iconSize: 15,
+                                  onPressed: (){showInfo();},
+                                ),
+                                Text("Group ID: " + snapshot.data[1]),
+                                IconButton(
+                                  icon: Icon(Icons.copy),
+                                  iconSize: 15,
+                                  onPressed: (){copyToClipBoard(snapshot.data[1]);},
+                                ),
 
-                ),
-              ),
+                              ]
+                          ),
+                        ),
+
+                      ),
+
+                    ),
+
+
+
               Container(
                   child: ListView.builder(
                       shrinkWrap: true,
@@ -101,6 +136,34 @@ class _State extends State<ShowGroupId> {
       print("hello bitch");
       //members = List.from(members)..removeAt(index);
     });
+  }
+
+  copyToClipBoard(String textToCopy) {
+    try {
+      Clipboard.setData(ClipboardData(text: textToCopy));
+      final snackBar = SnackBar(content: Text("Group ID copied to clipboard"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } catch(e) {
+      print(e);
+    }
+
+  }
+
+  void showInfo() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Group ID'),
+        content: const Text('This Group ID defines your home\'s Id. Tap the copy Icon to send it to another member for them to join your group'),
+        actions: <Widget>[
+
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
 

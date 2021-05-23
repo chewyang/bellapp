@@ -127,13 +127,14 @@ class OurDatabase{
   }
 
 
-  Future<String> createNotifications(List<String> tokens, String groupId) async {
+  Future<String> createNotifications(List<String> tokens, String groupId, {String info}) async {
     String retVal = "error";
 
     try{
       await _firestore.collection("notifications").add({
         'tokens': tokens,
-        'groupId': groupId
+        'groupId': groupId,
+        'info' : info
       });
       retVal = "success";
 

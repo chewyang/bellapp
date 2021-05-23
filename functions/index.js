@@ -5,9 +5,10 @@ const database = admin.firestore();
 
  exports.onCreateNotification = functions.firestore.document('/notifications/{notificationDoc}').onCreate(async (notifSnapshot, context) => {
     var tokens = notifSnapshot.data()['tokens'];
+    var title = notifSnapshot.data()['info'];
+    console.log(title);
 
-    var title = 'Oi pubor!';
-    var body = 'Another pubor at the door!';
+    var body = title + 'is at the door!';
 
     tokens.forEach(async eachToken =>{
         const message = {
