@@ -42,7 +42,7 @@ class OurCreateGroupState extends State<OurCreateGroup> {
                     controller: groupNameController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.group),
-                      hintText: "Group Name",
+                      hintText: "Home Name",
                     ),
                   ),
                   SizedBox(

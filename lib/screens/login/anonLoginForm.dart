@@ -46,10 +46,7 @@ class _OurAnonLoginFormState extends State<OurAnonLoginForm>{
 
       if(returnString == "success") {
         if(groupExist) {
-          // Navigator.pushAndRemoveUntil(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => OurGroupRing(groupId: guestInfoController.text,),), (route) => false
-          // );
+
           final snackBar1 = SnackBar(content: Text("Doorbell successfully rang!"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar1);
         } else {
@@ -96,11 +93,15 @@ class _OurAnonLoginFormState extends State<OurAnonLoginForm>{
           OurContainer(
             child: Column(
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all( 20.0),
+                  child: Text("Welcome Guest! You can either enter a short description of yourself to the homeowners or simply just ring the doorbell by tapping on 'Ring'", textAlign: TextAlign.center ,style: TextStyle(fontSize: 20, color: Colors.grey[600])),
+                ),
                 TextFormField(
                   controller: guestInfoController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.group),
-                    hintText: "Group Id la jibai",
+                    hintText: "Enter Short Description Of Visitor",
                   ),
                 ),
                 SizedBox(
@@ -110,7 +111,7 @@ class _OurAnonLoginFormState extends State<OurAnonLoginForm>{
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 80),
                     child: Text(
-                      "Join",
+                      "Ring",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

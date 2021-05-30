@@ -29,9 +29,18 @@ class OurLogin extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.all(20.0),
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(40.0),
-                  child: Image.asset("assets/logo.png"),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 100, bottom: 30),
+                      child: Image.asset("assets/qrbell.png"),
+                    ),
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Image.asset("assets/bell.png"),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20,),
                 loginDecider(),

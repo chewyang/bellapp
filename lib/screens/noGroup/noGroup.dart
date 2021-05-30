@@ -16,10 +16,22 @@ class ourNoGroup extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Spacer(flex:1,),
-          Padding(padding: EdgeInsets.all(80.0), child: Image.asset("assets/logo.png"),),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 40, right: 10, top: 100, bottom: 30),
+                child: Image.asset("assets/qrbell.png"),
+              ),
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: Image.asset("assets/bell.png"),
+              ),
+            ],
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.0),
-            child: Text("Welcome to BellApp", textAlign: TextAlign.center, style: TextStyle(fontSize: 40, color: Colors.grey[600])),
+            child: Text("Welcome", textAlign: TextAlign.center, style: TextStyle(fontSize: 40, color: Colors.grey[600])),
           ),
 
           Padding(
